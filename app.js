@@ -146,6 +146,34 @@
        localStorage.setItem('jars', JSON.stringify(this.jars));
 		
 	 },
+	 
+	 changeJar: function(event){
+		 console.log(event.target.parentNode);
+		 console.log(event.target.dataset.id);
+		 
+		 var li = event.target.parentNode;
+		 
+		 var new_title = prompt("Uus pealkiri");
+		 var new_ingredients = prompt("Uus koostis");
+		 
+		 li.querySelector(".content").innerHTML = new_title;
+		 li.querySelectror(".content").innerHTML = new_ingredients;
+
+		 
+		 this.jars.forEach(function(jar, i){
+			 
+			 if(jar.id == event.target.dataset.id){
+				 
+				 jar.title = new_title;
+				 jar.ingredients = new_ingredients;
+				 
+				 Moosipurk.instance.jars.splice(i, 1, jar);
+			 }
+		 });
+		 
+		 localStorage.setItem('jars', JSON.stringify(this.jars));
+	 },
+	 
      search: function(event){
          //otsikasti vaartus
          var needle = document.querySelector('#search').value.toLowerCase();
@@ -278,16 +306,23 @@
 	   
 	   var delete_span = document.createElement('span');
 	   delete_span.appendChild(document.createTextNode(' kustuta'));
+	   var change_span = document.createElement('span');
+	   change_span.appendChild(document.createTextNode(' muuda'));
 		
 	   delete_span.style.color = 'red';
 	   delete_span.style.cursor = 'pointer';
+	   change_span.style.color = 'green';
+	   change_span.style.cursor = 'pointer';
 	   
 	   //panen kulge id
 	   delete_span.setAttribute('data-id', this.id);
+	   change_span.setAttribute('data-id', this.id);
 	   
 	   delete_span.addEventListener('click', Moosipurk.instance.deleteJar.bind(Moosipurk.instance));
+	   change_span.addEventListener('click', Moosipurk.instance.changeJar.bind(Moosipurk.instance));
 	   
 	   li.appendChild(delete_span);
+	   li.appendChild(change_span);
 
        return li;
 
